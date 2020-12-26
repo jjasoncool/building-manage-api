@@ -6,7 +6,16 @@
 cp .env.example .env
 ```
 
+## Start service
+
+```
+yarn docker
+yarn start:dev
+```
+
 ## Debug
+
+vscode config:
 
 ```
 {
@@ -24,4 +33,8 @@ cp .env.example .env
     }
   ]
 }
+```
+
+```
+yarn start:dev:debug
 ```
