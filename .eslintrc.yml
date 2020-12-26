@@ -1,0 +1,60 @@
+extends:
+  - airbnb-base
+  - plugin:jest/recommended
+  - plugin:ramda/recommended
+plugins:
+  - jest
+  - ramda
+env:
+  node: true
+  es6: true
+  jest/globals: true
+parserOptions:
+  ecmaVersion: 2021
+  sourceType: script
+rules:
+  no-unused-vars:
+    - error
+    - argsIgnorePattern: (res|req|next)
+  import/no-extraneous-dependencies:
+    - error
+    - devDependencies:
+        - "**/*.test.js"
+        - "**/__mocks__/**"
+  no-underscore-dangle:
+    - error
+    - allow:
+        - _
+        - __
+        - _id
+        - _v
+  no-console:
+    - error
+  no-bitwise:
+    - error
+  no-sync:
+    - error
+    - allowAtRootLevel: true
+  strict:
+    - error
+    - safe
+  jest/expect-expect:
+    - error
+    - assertFunctionNames:
+        - expect
+  padding-line-between-statements:
+    - error
+    - blankLine: "always"
+      prev: "*"
+      next: ["return", "break"]
+    - blankLine: "always"
+      prev: ["const", "let", "var", "block-like"]
+      next: "*"
+    - blankLine: "any"
+      prev: ["const", "let", "var"]
+      next: ["const", "let", "var"]
+  curly:
+    - error
+    - "all"
+  ramda/prefer-ramda-boolean: "off"
+  ramda/cond-simplification: "off"
