@@ -1,7 +1,7 @@
 'use strict';
 
 const bcrypt = require('bcrypt');
-const BaseRepository = require('./BaseRepository');
+const BaseRepository = require('./Base');
 
 class UserRepository extends BaseRepository {
   constructor({ User }) {
