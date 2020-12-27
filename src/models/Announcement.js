@@ -22,12 +22,21 @@ const announcementsSchema = new Schema(
     position: {
       type: Number,
     },
-    // sourceOfLaw
-    // process
+    // sourceOfLaw 法源依據（開會依據什麼法律開會）
+    sourceOfLaw: {
+      type: String,
+    },
+    // process 開會議程（開會流程）
+    process: {
+      type: String,
+    },
     content: {
       type: String,
     },
-    // notice
+    // notice 注意事項
+    notice: {
+      type: String,
+    },
     attachments: {
       // paths of static files
       type: [String],
