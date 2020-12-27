@@ -2,22 +2,16 @@
 
 const Router = require('koa-router');
 
-// const AnnouncementController = require('../controllers/Announcement');
+const Guard = require('../auth/Guard');
+const AnnouncementController = require('../controllers/Announcement');
 
 const announcementRouter = new Router();
 
 announcementRouter
-  .get('/', async () => {
-    // ...
-  })
-  .post('/', async () => {
-    // ...
-  })
-  .put('/:id', async () => {
-    // ...
-  })
-  .del('/:id', async () => {
-    // ...
-  });
+  .get('/', AnnouncementController.list)
+  .get('/:id', AnnouncementController.get)
+  .post('/', Guard.isAuthenticated, AnnouncementController.create)
+  .put('/:id', Guard.isAuthenticated, AnnouncementController.update)
+  .del('/:id', Guard.isAuthenticated, AnnouncementController.delete);
 
 module.exports = announcementRouter;
