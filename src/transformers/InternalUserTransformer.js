@@ -8,7 +8,7 @@ class InternalUserTransformer {
   }
 
   static transformList(rawUsers) {
-    return R.map(InternalUserTransformer.transform, rawUsers);
+    return R.map(R.pick(['no', 'username']), rawUsers);
   }
 }
 
