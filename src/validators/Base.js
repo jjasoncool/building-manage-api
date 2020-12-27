@@ -6,7 +6,7 @@ class BaseValidator {
   static async list(ctx) {
     const { query } = ctx.request;
 
-    // type conversion
+    // casting query
     ctx.request.query = {
       ...query,
       ...(query.page && { page: parseInt(query.page, 10) }),

@@ -10,12 +10,8 @@ const userRouter = new Router();
 
 userRouter
   .get('/', UserValidator.list, UserController.list)
+  .get('/:no', UserValidator.get, UserController.get)
   .post('/', UserValidator.create, UserController.create)
-  .put('/:id', async () => {
-    // ...
-  })
-  .del('/:id', async () => {
-    // ...
-  });
+  .patch('/:no', UserValidator.update, UserController.update);
 
 module.exports = userRouter;
