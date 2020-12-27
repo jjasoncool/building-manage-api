@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
 // const Joi = require("joi");
-const Router = require("koa-router");
+const Router = require('koa-router');
 // const AnnouncementModel = require("../models/Announcement");
-const UserModel = require("../models/User");
+const UserModel = require('../models/User');
 // const AnnouncementRepository = require("../repositories/Announcement");
-const UserRepository = require("../repositories/User");
+const UserRepository = require('../repositories/User');
 
 const router = new Router();
 
@@ -16,37 +16,37 @@ const userRepository = new UserRepository({ User: UserModel });
 
 // TODO: refactor & use DI IOC
 // Just test
-router.get("/", async (ctx) => {
-  ctx.body = "Hello World!";
+router.get('/', async (ctx) => {
+  ctx.body = 'Hello World!';
 });
 
 router
-  .post("/login", async () => {
+  .post('/login', async () => {
     // ...
   })
-  .post("/logout", async () => {
+  .post('/logout', async () => {
     // ...
   });
 
 router
-  .get("/announcements", async () => {
+  .get('/announcements', async () => {
     // ...
   })
-  .post("/announcements", async () => {
+  .post('/announcements', async () => {
     // ...
   })
-  .put("/announcements/:id", async () => {
+  .put('/announcements/:id', async () => {
     // ...
   })
-  .del("/announcements/:id", async () => {
+  .del('/announcements/:id', async () => {
     // ...
   });
 
 router
-  .get("/users", async () => {
+  .get('/users', async () => {
     // ...
   })
-  .post("/users", async (ctx) => {
+  .post('/users', async (ctx) => {
     // Test only
     try {
       const { username, password } = ctx.request.body;
@@ -58,18 +58,18 @@ router
       // Todo: refactor error handling
       ctx.status = 400;
       ctx.body = {
-        message: "username is used",
+        message: 'username is used',
       };
     }
   })
-  .put("/users/:id", async () => {
+  .put('/users/:id', async () => {
     // ...
   })
-  .del("/users/:id", async () => {
+  .del('/users/:id', async () => {
     // ...
   });
 
-router.get("/me", async () => {
+router.get('/me', async () => {
   // ...
 });
 

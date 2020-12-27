@@ -20,8 +20,8 @@ rules:
   import/no-extraneous-dependencies:
     - error
     - devDependencies:
-        - "**/*.test.js"
-        - "**/__mocks__/**"
+        - '**/*.test.js'
+        - '**/__mocks__/**'
   no-underscore-dangle:
     - error
     - allow:
@@ -45,17 +45,17 @@ rules:
         - expect
   padding-line-between-statements:
     - error
-    - blankLine: "always"
-      prev: "*"
-      next: ["return", "break"]
-    - blankLine: "always"
-      prev: ["const", "let", "var", "block-like"]
-      next: "*"
-    - blankLine: "any"
-      prev: ["const", "let", "var"]
-      next: ["const", "let", "var"]
+    - blankLine: 'always'
+      prev: '*'
+      next: ['return', 'break']
+    - blankLine: 'always'
+      prev: ['const', 'let', 'var', 'block-like']
+      next: '*'
+    - blankLine: 'any'
+      prev: ['const', 'let', 'var']
+      next: ['const', 'let', 'var']
   curly:
     - error
-    - "all"
-  ramda/prefer-ramda-boolean: "off"
-  ramda/cond-simplification: "off"
+    - 'all'
+  ramda/prefer-ramda-boolean: 'off'
+  ramda/cond-simplification: 'off'

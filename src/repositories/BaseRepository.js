@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-const R = require("ramda");
-const { isNilOrEmpty } = require("../utils/ramdaHelpers");
-const STATUS = require("../constants/Status");
+const R = require('ramda');
+const { isNilOrEmpty } = require('../utils/ramdaHelpers');
+const STATUS = require('../constants/Status');
 
 class BaseRepository {
   constructor({ model }) {
@@ -10,6 +10,7 @@ class BaseRepository {
   }
 
   async create(item, { session = null } = {}) {
+    // forget why use array here, something related to session or transaction in mongodb
     const created = await this.model.create([item], { session });
 
     const result = created[0].toObject();
@@ -30,11 +31,11 @@ class BaseRepository {
       filter: { _id: { $in: _ids } },
     });
 
-    const indexedResults = R.indexBy(R.prop("_id"), queryResults);
+    const indexedResults = R.indexBy(R.prop('_id'), queryResults);
 
     const finalResults = R.reject(
       R.isNil,
-      R.map((id) => R.prop(id, indexedResults), _ids)
+      R.map((id) => R.prop(id, indexedResults), _ids),
     );
 
     return finalResults;
@@ -71,7 +72,7 @@ class BaseRepository {
         {
           new: true,
           runValidators: true,
-        }
+        },
       )
       .lean()
       .session(session)

@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-const mongoose = require("mongoose");
-const AutoIncrement = require("mongoose-sequence")(mongoose);
+const mongoose = require('mongoose');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const { Schema } = mongoose;
 
@@ -44,12 +44,12 @@ const announcementsSchema = new Schema(
       required: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 announcementsSchema.plugin(AutoIncrement, {
-  id: "announcements_no",
-  inc_field: "no",
+  id: 'announcements_no',
+  inc_field: 'no',
   start_seq: 1,
 });
 
@@ -57,6 +57,6 @@ announcementsSchema.index({ no: 1 });
 announcementsSchema.index({ createAt: 1 });
 announcementsSchema.index({ updateAt: 1 });
 
-const AnnouncementModel = mongoose.model("Announcement", announcementsSchema);
+const AnnouncementModel = mongoose.model('Announcement', announcementsSchema);
 
 module.exports = AnnouncementModel;
