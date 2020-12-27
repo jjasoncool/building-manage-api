@@ -3,10 +3,10 @@
 // const Joi = require('joi');
 
 class UserValidator {
-  static create(ctx, next) {
+  static async create(ctx, next) {
     // const { body } = ctx.request;
 
-    next();
+    await next();
   }
 }
 
