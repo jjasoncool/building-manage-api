@@ -6,6 +6,8 @@ const Router = require('koa-router');
 const UserModel = require('../models/User');
 // const AnnouncementRepository = require("../repositories/Announcement");
 const UserRepository = require('../repositories/User');
+const InternalUserTransformer = require('../transformers/InternalUserTransformer');
+const { calcOffset, getPagination } = require('../utils/queryHelpers');
 
 const router = new Router();
 
@@ -15,11 +17,6 @@ const router = new Router();
 const userRepository = new UserRepository({ User: UserModel });
 
 // TODO: refactor & use DI IOC
-// Just test
-router.get('/', async (ctx) => {
-  ctx.body = 'Hello World!';
-});
-
 router
   .post('/login', async () => {
     // ...
@@ -43,15 +40,28 @@ router
   });
 
 router
-  .get('/users', async () => {
-    // ...
+  .get('/users', async (ctx) => {
+    const { page, pageSize } = ctx.request.params;
+
+    const offset = calcOffset(page, pageSize);
+
+    const [results, count] = await Promise.all([
+      userRepository.find(offset, pageSize),
+      userRepository.count(),
+    ]);
+
+    ctx.body = {
+      ...getPagination(count, pageSize),
+      items: InternalUserTransformer.transformList(results),
+    };
   })
   .post('/users', async (ctx) => {
-    // Test only
     try {
       const { username, password } = ctx.request.body;
 
-      const result = await userRepository.create({ username, password });
+      const result = InternalUserTransformer.transform(
+        await userRepository.create({ username, password }),
+      );
 
       ctx.body = result;
     } catch (error) {

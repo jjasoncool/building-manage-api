@@ -9,19 +9,26 @@ class UserRepository extends BaseRepository {
   }
 
   async create(item, { session = null } = {}) {
-    const created = await this.model.create(
-      [
-        {
-          ...item,
-          password: await bcrypt.hash(item.password, 8),
-        },
-      ],
+    return super.create(
+      {
+        ...item,
+        password: await bcrypt.hash(item.password, 8),
+      },
       { session },
     );
+  }
 
-    const result = created[0].toObject();
-
-    return result;
+  async update(_id, updates, { session = null } = {}) {
+    return super.update(
+      _id,
+      {
+        ...updates,
+        ...(updates.password
+          ? { password: await bcrypt.hash(updates.password, 8) }
+          : {}),
+      },
+      { session },
+    );
   }
 
   static async validatePassword(password, encryptedPassword) {

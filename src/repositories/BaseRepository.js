@@ -41,13 +41,13 @@ class BaseRepository {
     return finalResults;
   }
 
-  async findAll({ filter = {}, sort = {} }) {
+  async findAll({ filter = {}, sort = {} } = {}) {
     const query = this.model.find(filter).lean().sort(sort).cursor();
 
     return query;
   }
 
-  async find(offset, limit, { filter = {}, sort = {} }) {
+  async find(offset = 0, limit = 20, { filter = {}, sort = {} } = {}) {
     const query = this.model
       .find(filter)
       .lean()
