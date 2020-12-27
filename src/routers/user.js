@@ -9,7 +9,7 @@ const UserValidator = require('../validators/User');
 const userRouter = new Router();
 
 userRouter
-  .get('/', UserController.list)
+  .get('/', UserValidator.list, UserController.list)
   .post('/', UserValidator.create, UserController.create)
   .put('/:id', async () => {
     // ...

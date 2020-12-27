@@ -3,7 +3,9 @@
 const Joi = require('joi');
 const R = require('ramda');
 
-class UserValidator {
+const BaseValidator = require('./Base');
+
+class UserValidator extends BaseValidator {
   static async create(ctx, next) {
     try {
       const { body } = ctx.request;
@@ -15,6 +17,19 @@ class UserValidator {
 
       await schema.validateAsync(body, { abortEarly: false });
 
+      await next();
+    } catch (error) {
+      ctx.status = 400;
+      ctx.body = {
+        messages: R.map(({ message }) => message, error.details),
+      };
+    }
+  }
+
+  static async list(ctx, next) {
+    // Todo: refactor, bad structure
+    try {
+      await super.list(ctx);
       await next();
     } catch (error) {
       ctx.status = 400;
