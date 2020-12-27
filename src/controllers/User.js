@@ -28,6 +28,14 @@ class UserController {
     ctx.body = result;
   }
 
+  static async getMe(ctx) {
+    const { user: me } = ctx.state;
+
+    const result = InternalUserTransformer.transform(me);
+
+    ctx.body = result;
+  }
+
   static async create(ctx) {
     try {
       const { username, password } = ctx.request.body;

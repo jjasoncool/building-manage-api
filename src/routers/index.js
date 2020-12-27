@@ -1,24 +1,15 @@
 'use strict';
 
 const Router = require('koa-router');
-const serve = require('koa-static')('./src');
 
 const announcementRouter = require('./announcement');
+const authRouter = require('./auth');
 const userRouter = require('./user');
+const staticRouter = require('./static');
 
 const router = new Router();
 
-router
-  .post('/login', async () => {
-    // ...
-  })
-  .post('/logout', async () => {
-    // ...
-  });
-
-router.get('/me', async () => {
-  // ...
-});
+router.use('/auth', authRouter.routes(), authRouter.allowedMethods());
 
 router.use(
   '/announcements',
@@ -28,10 +19,6 @@ router.use(
 
 router.use('/users', userRouter.routes(), userRouter.allowedMethods());
 
-// only works without nested folder, investigate how to support nested folders
-router.get('/static/public/:any', serve);
-
-// Todo: add guard
-router.get('/static/internal/:any', serve);
+router.use('/static', staticRouter.routes(), staticRouter.allowedMethods());
 
 module.exports = router;

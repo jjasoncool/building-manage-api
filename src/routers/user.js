@@ -3,15 +3,22 @@
 // const Joi = require("joi");
 const Router = require('koa-router');
 
-const UserController = require('../controllers/User');
+const Guard = require('../auth/Guard');
 const UserValidator = require('../validators/User');
+const UserController = require('../controllers/User');
 
 const userRouter = new Router();
 
 userRouter
-  .get('/', UserValidator.list, UserController.list)
-  .get('/:no', UserValidator.get, UserController.get)
+  .get('/', Guard.isAuthenticated, UserValidator.list, UserController.list)
+  .get('/me', Guard.isAuthenticated, UserController.getMe)
+  .get('/:no', Guard.isAuthenticated, UserValidator.get, UserController.get)
   .post('/', UserValidator.create, UserController.create)
-  .patch('/:no', UserValidator.update, UserController.update);
+  .patch(
+    '/:no',
+    Guard.isAuthenticated,
+    UserValidator.update,
+    UserController.update,
+  );
 
 module.exports = userRouter;
