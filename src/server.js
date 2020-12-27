@@ -6,8 +6,8 @@ const cors = require('@koa/cors');
 const compress = require('koa-compress');
 const koaBody = require('koa-body');
 const zlib = require('zlib');
-
 const mongoose = require('mongoose');
+
 const config = require('./config');
 const router = require('./routers');
 
