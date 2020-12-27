@@ -1,13 +1,10 @@
 version: "3.9"
 
 services:
-    mongodb:
-        image: mongo:${DB_VERSION}
-        environment:
-            - TZ=Asia/Taipei
-            - MONGO_INITDB_ROOT_USERNAME=root
-            - MONGO_INITDB_ROOT_PASSWORD=admin
-        ports:
-            - "27017:27017"
-        container_name: "dkmongo"
-        restart: always
+  mongodb:
+    image: mongo:4.4.2
+    environment:
+      - TZ=Asia/Taipei
+    ports:
+      - "27017:27017"
+    restart: always
