@@ -4,12 +4,13 @@
 const Router = require('koa-router');
 
 const UserController = require('../controllers/User');
+const UserValidator = require('../validators/User');
 
 const userRouter = new Router();
 
 userRouter
   .get('/', UserController.list)
-  .post('/', UserController.create)
+  .post('/', UserValidator.create, UserController.create)
   .put('/:id', async () => {
     // ...
   })

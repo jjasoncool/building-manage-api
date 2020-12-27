@@ -24,7 +24,10 @@ class UserController {
   }
 
   static async list(ctx) {
-    const { page, pageSize } = ctx.request.params;
+    let { page, pageSize } = ctx.request.query;
+
+    page = parseInt(page, 10);
+    pageSize = parseInt(pageSize, 10);
 
     const offset = calcOffset(page, pageSize);
 

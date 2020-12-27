@@ -1,6 +1,5 @@
 'use strict';
 
-// const Joi = require("joi");
 const Router = require('koa-router');
 const announcementRouter = require('./announcement');
 const userRouter = require('./user');
