@@ -9,9 +9,9 @@ const announcementRouter = new Router();
 
 announcementRouter
   .get('/', AnnouncementController.list)
-  .get('/:id', AnnouncementController.get)
+  .get('/:no', AnnouncementController.get)
   .post('/', Guard.isAuthenticated, AnnouncementController.create)
-  .put('/:id', Guard.isAuthenticated, AnnouncementController.update)
-  .del('/:id', Guard.isAuthenticated, AnnouncementController.delete);
+  .put('/:no', Guard.isAuthenticated, AnnouncementController.update)
+  .del('/:no', Guard.isAuthenticated, AnnouncementController.delete);
 
 module.exports = announcementRouter;

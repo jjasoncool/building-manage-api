@@ -3,18 +3,18 @@
 const R = require('ramda');
 
 const { AnnouncementRepository } = require('../repositories');
-const InternalUserTransformer = require('../transformers/InternalUserTransformer');
+const InternalAnnouncementTransformer = require('../transformers/InternalAnnouncementTransformer');
 const { calcOffset, getPagination } = require('../utils/queryHelpers');
 
 class AnnouncementController {
   static async get(ctx) {
     const { no } = ctx.params;
 
-    const targetAnnounce = R.head(
+    const targetAnnouncement = R.head(
       await AnnouncementRepository.find(0, 1, { filter: { no } }),
     );
 
-    if (R.isNil(targetAnnounce)) {
+    if (R.isNil(targetAnnouncement)) {
       ctx.status = 404;
       ctx.body = {
         message: `Announce no[${no}] not found`,
@@ -23,7 +23,9 @@ class AnnouncementController {
       return;
     }
 
-    const result = InternalUserTransformer.transform(targetAnnounce);
+    const result = InternalAnnouncementTransformer.transform(
+      targetAnnouncement,
+    );
 
     ctx.body = result;
     ctx.status = 200;
@@ -44,14 +46,14 @@ class AnnouncementController {
 
     ctx.body = {
       ...getPagination(count, pageSize),
-      items: InternalUserTransformer.transformList(results),
+      items: InternalAnnouncementTransformer.transformList(results),
     };
     ctx.status = 200;
   }
 
   static async create(ctx) {
     try {
-      const result = InternalUserTransformer.transform(
+      const result = InternalAnnouncementTransformer.transform(
         await AnnouncementRepository.create(ctx.request.body),
       );
 
@@ -70,11 +72,11 @@ class AnnouncementController {
   static async update(ctx) {
     const { no } = ctx.params;
 
-    const targetAnnounce = R.head(
+    const targetAnnouncement = R.head(
       await AnnouncementRepository.find(0, 1, { filter: { no } }),
     );
 
-    if (R.isNil(targetAnnounce)) {
+    if (R.isNil(targetAnnouncement)) {
       ctx.status = 404;
       ctx.body = {
         message: `Announce no[${no}] not found`,
@@ -83,11 +85,11 @@ class AnnouncementController {
       return;
     }
 
-    const { _id: userId } = targetAnnounce;
+    const { _id: announcementId } = targetAnnouncement;
 
-    const result = InternalUserTransformer.transform(
+    const result = InternalAnnouncementTransformer.transform(
       await AnnouncementRepository.update(
-        userId,
+        announcementId,
         R.reject(R.isNil, ctx.request.body),
       ),
     );
