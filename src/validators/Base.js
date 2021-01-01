@@ -1,24 +1,81 @@
 'use strict';
 
-const Joi = require('joi');
+const R = require('ramda');
+
+const commonSchemas = require('./commonSchemas');
 
 class BaseValidator {
-  static async list(ctx) {
-    const { query } = ctx.request;
+  static async get(ctx, next) {
+    try {
+      const { noSchema } = commonSchemas;
 
-    // casting query
-    ctx.request.query = {
-      ...query,
-      ...(query.page && { page: parseInt(query.page, 10) }),
-      ...(query.pageSize && { pageSize: parseInt(query.pageSize, 10) }),
-    };
+      const { no } = await noSchema.validateAsync(ctx.params, {
+        abortEarly: false,
+      });
 
-    const schema = Joi.object({
-      page: Joi.number().integer().min(1),
-      pageSize: Joi.number().integer().min(5),
-    });
+      ctx.params.no = no;
 
-    await schema.validateAsync(query, { abortEarly: false });
+      return next();
+    } catch (error) {
+      ctx.status = 400;
+      ctx.body = {
+        messages: error.details
+          ? R.map(({ message }) => message, error.details)
+          : error.message,
+      };
+
+      return ctx;
+    }
+  }
+
+  static async list(ctx, next) {
+    try {
+      const { paginationSchema } = commonSchemas;
+
+      const { page, pageSize } = await paginationSchema.validateAsync(
+        ctx.request.query,
+        {
+          abortEarly: false,
+        },
+      );
+
+      ctx.query.page = page;
+      ctx.query.pageSize = pageSize;
+
+      return next();
+    } catch (error) {
+      ctx.status = 400;
+      ctx.body = {
+        messages: error.details
+          ? R.map(({ message }) => message, error.details)
+          : error.message,
+      };
+
+      return ctx;
+    }
+  }
+
+  static async delete(ctx, next) {
+    try {
+      const { noSchema } = commonSchemas;
+
+      const { no } = await noSchema.validateAsync(ctx.params, {
+        abortEarly: false,
+      });
+
+      ctx.params.no = no;
+
+      return next();
+    } catch (error) {
+      ctx.status = 400;
+      ctx.body = {
+        messages: error.details
+          ? R.map(({ message }) => message, error.details)
+          : error.message,
+      };
+
+      return ctx;
+    }
   }
 }
 

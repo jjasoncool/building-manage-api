@@ -1,7 +1,7 @@
 'use strict';
 
 const passport = require('../auth/passport');
-const InternalUserTransformer = require('../transformers/InternalUserTransformer');
+const InternalUserTransformer = require('../transformers/User/InternalUserTransformer');
 
 class AuthController {
   static async login(ctx) {

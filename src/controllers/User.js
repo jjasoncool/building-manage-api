@@ -3,16 +3,14 @@
 const R = require('ramda');
 
 const { userRepository } = require('../repositories');
-const InternalUserTransformer = require('../transformers/InternalUserTransformer');
+const InternalUserTransformer = require('../transformers/User/InternalUserTransformer');
 const { calcOffset, getPagination } = require('../utils/queryHelpers');
 
 class UserController {
   static async get(ctx) {
     const { no } = ctx.params;
 
-    const targetUser = R.head(
-      await userRepository.find(0, 1, { filter: { no } }),
-    );
+    const targetUser = await userRepository.findByNo(no);
 
     if (R.isNil(targetUser)) {
       ctx.status = 404;
@@ -38,10 +36,8 @@ class UserController {
 
   static async create(ctx) {
     try {
-      const { username, password } = ctx.request.body;
-
       const result = InternalUserTransformer.transform(
-        await userRepository.create({ username, password }),
+        await userRepository.create(R.reject(R.isNil, ctx.request.body)),
       );
 
       ctx.body = result;
@@ -56,11 +52,8 @@ class UserController {
 
   static async update(ctx) {
     const { no } = ctx.params;
-    const { username, password } = ctx.request.body;
 
-    const targetUser = R.head(
-      await userRepository.find(0, 1, { filter: { no } }),
-    );
+    const targetUser = await userRepository.findByNo(no);
 
     if (R.isNil(targetUser)) {
       ctx.status = 404;
@@ -74,20 +67,14 @@ class UserController {
     const { _id: userId } = targetUser;
 
     const result = InternalUserTransformer.transform(
-      await userRepository.update(
-        userId,
-        R.reject(R.isNil, { username, password }),
-      ),
+      await userRepository.update(userId, R.reject(R.isNil, ctx.request.body)),
     );
 
     ctx.body = result;
   }
 
   static async list(ctx) {
-    let { page, pageSize } = ctx.request.query;
-
-    page = parseInt(page, 10);
-    pageSize = parseInt(pageSize, 10);
+    const { page = 1, pageSize = 10 } = ctx.request.query;
 
     const offset = calcOffset(page, pageSize);
 

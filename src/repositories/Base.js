@@ -1,7 +1,7 @@
 'use strict';
 
 const R = require('ramda');
-const { isNilOrEmpty } = require('../utils/ramdaHelpers');
+const { isNilOrEmpty } = require('../utils/commomHelpers');
 const STATUS = require('../constants/Status');
 
 class BaseRepository {
@@ -22,6 +22,12 @@ class BaseRepository {
     const query = this.model.findById(_id).lean();
 
     const result = await query.exec();
+
+    return result;
+  }
+
+  async findByNo(no) {
+    const result = R.head(await this.find(0, 1, { filter: { no } }));
 
     return result;
   }

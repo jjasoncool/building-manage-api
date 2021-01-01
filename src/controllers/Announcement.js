@@ -2,17 +2,15 @@
 
 const R = require('ramda');
 
-const { AnnouncementRepository } = require('../repositories');
-const InternalAnnouncementTransformer = require('../transformers/InternalAnnouncementTransformer');
+const { announcementRepository } = require('../repositories');
+const InternalAnnouncementTransformer = require('../transformers/Announcement/InternalAnnouncementTransformer');
 const { calcOffset, getPagination } = require('../utils/queryHelpers');
 
 class AnnouncementController {
   static async get(ctx) {
     const { no } = ctx.params;
 
-    const targetAnnouncement = R.head(
-      await AnnouncementRepository.find(0, 1, { filter: { no } }),
-    );
+    const targetAnnouncement = await announcementRepository.findByNo(no);
 
     if (R.isNil(targetAnnouncement)) {
       ctx.status = 404;
@@ -28,36 +26,34 @@ class AnnouncementController {
     );
 
     ctx.body = result;
-    ctx.status = 200;
   }
 
   static async list(ctx) {
-    let { page, pageSize } = ctx.request.query;
-
-    page = parseInt(page, 10);
-    pageSize = parseInt(pageSize, 10);
+    const { page = 1, pageSize = 10 } = ctx.request.query;
 
     const offset = calcOffset(page, pageSize);
 
     const [results, count] = await Promise.all([
-      AnnouncementRepository.find(offset, pageSize),
-      AnnouncementRepository.count(),
+      announcementRepository.find(offset, pageSize),
+      announcementRepository.count(),
     ]);
 
     ctx.body = {
       ...getPagination(count, pageSize),
       items: InternalAnnouncementTransformer.transformList(results),
     };
-    ctx.status = 200;
   }
 
   static async create(ctx) {
     try {
       const result = InternalAnnouncementTransformer.transform(
-        await AnnouncementRepository.create(ctx.request.body),
+        await announcementRepository.create(
+          R.reject(R.isNil, ctx.request.body),
+        ),
       );
 
       ctx.body = result;
+      ctx.status = 200;
     } catch (error) {
       // Todo: refactor error handling
       ctx.status = 400;
@@ -65,16 +61,12 @@ class AnnouncementController {
         message: 'Add announce error.',
       };
     }
-
-    ctx.status = 200;
   }
 
   static async update(ctx) {
     const { no } = ctx.params;
 
-    const targetAnnouncement = R.head(
-      await AnnouncementRepository.find(0, 1, { filter: { no } }),
-    );
+    const targetAnnouncement = await announcementRepository.findByNo(no);
 
     if (R.isNil(targetAnnouncement)) {
       ctx.status = 404;
@@ -88,14 +80,13 @@ class AnnouncementController {
     const { _id: announcementId } = targetAnnouncement;
 
     const result = InternalAnnouncementTransformer.transform(
-      await AnnouncementRepository.update(
+      await announcementRepository.update(
         announcementId,
         R.reject(R.isNil, ctx.request.body),
       ),
     );
 
     ctx.body = result;
-    ctx.status = 200;
   }
 
   static async delete(ctx) {

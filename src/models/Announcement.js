@@ -36,10 +36,12 @@ const announcementsSchema = new Schema(
     // notice 注意事項
     notice: {
       type: String,
+      default: '',
     },
     attachments: {
       // paths of static files
       type: [String],
+      default: [],
     },
     receiver: {
       type: String,
