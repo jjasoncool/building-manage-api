@@ -32,7 +32,7 @@ app.keys = config.app.KEYS;
 
 app
   .use(helmet())
-  .use(cors())
+  .use(cors({ credentials: true }))
   .use(
     compress({
       filter(contentType) {

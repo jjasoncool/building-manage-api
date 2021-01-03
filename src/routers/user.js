@@ -13,7 +13,7 @@ userRouter
   .get('/', Guard.isAuthenticated, UserValidator.list, UserController.list)
   .get('/me', Guard.isAuthenticated, UserController.getMe)
   .get('/:no', Guard.isAuthenticated, UserValidator.get, UserController.get)
-  .post('/', UserValidator.create, UserController.create)
+  .post('/', Guard.isAuthenticated, UserValidator.create, UserController.create)
   .patch(
     '/:no',
     Guard.isAuthenticated,
